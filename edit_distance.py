@@ -1,23 +1,25 @@
 import sys
 def edit_distance(str,str2):
-    m = []
-    temp = []
-    for i in range(len(str)):
-        for j in range(len(str2)):
-            temp.append(0)
-        m.append(temp)
-        temp = []
-    for i in range(len(str)):
-        m[i][0] = i
-    for j in range(len(str2)):
-        m[0][j] = j
-    for i in range(len(str)):
-        for j in range(len(str2)):
-            if str[i] == str2[j]:
-                m[i][j] = min(m[i-1][j-1],m[i-1][j] + 1,m[i][j-1] + 1)
+    #check to see if strings are empty
+    if len(str) == 0:
+        return len(str2)
+    if len(str2) == 0:
+        return len(str)
+
+    distance = [[0 for i in range(len(str2)+1)] for j in range(len(str)+1)]
+    for i in range(1,len(str)+1):
+        distance[i][0] = i
+    for j in range(1,len(str2)+1):
+        distance[0][j] = j
+    for i in range(1,len(str)+1):
+        for j in range(1,len(str2)+1):
+            if str[i-1] == str2[j-1]:
+                distance[i][j] = min(distance[i-1][j-1],distance[i-1][j] + 1,distance[i][j-1] + 1)
             else:
-                m[i][j] = min(m[i-1][j-1]+1,m[i-1][j] + 1,m[i][j-1] + 1)
-    return m[len(str)-1][len(str2)-1]
+                distance[i][j] = min(distance[i-1][j-1]+1,distance[i-1][j] + 1,distance[i][j-1] + 1)
+    for i in range(len(distance)):
+        print distance[i] , '\n'
+    return distance[len(str)][len(str2)]
 
 # This function gets the input from command line
 def main(argv):
